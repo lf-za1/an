@@ -37,7 +37,7 @@
     var cacheEl = document.getElementById("cache");
     function setState(t, c) { stateEl.textContent = t; stateEl.className = c || ""; }
     function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
-    var params = new URLSearchParams(location.search);
+    var queryString = location.search || "";
 
     // Firmwares this build has a MEASURED kernel table for. jb.js still runs its
     // own kernel-table-present gate, so this is UX only -- an unlisted firmware
@@ -55,7 +55,7 @@
         fwnum = parseInt(m[1], 10) * 100 + parseInt(ms, 10);
     }
 
-    var forced = params.get("force") === "1";
+    var forced = /(?:\?|&)force=1(?:&|$)/.test(queryString);
     var supported = forced || (fwnum !== null && SUPPORTED[fwnum] === 1);
     detEl.innerHTML = "firmware <b>" + (key || "unknown") + "</b>"
         + (supported ? " &middot; <b>supported</b>"
